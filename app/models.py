@@ -445,7 +445,7 @@ class Requirement(db.Model):
     __tablename__ = "requirement"
     id = db.Column(db.Integer , primary_key=True , autoincrement=True)
     name = db.Column(db.String(255) , unique=False , nullable=True)
-    requirement_type = db.Column(db.Enum("WEEKDAY" , "WEEKEND"))
+    requirement_type = db.Column(db.Enum("WEEKDAY" , "WEEKEND" , name='day_types'))
     skill_id = db.Column(db.Integer , db.ForeignKey('skills.id'))
     skill=db.relationship('Skill',uselist=False)
     min_num_staff_s0 = db.Column(db.Integer , default = 0 , nullable=True)
@@ -473,9 +473,9 @@ class Nurse(db.Model):
     first_name=db.Column(db.String(255),unique=False,nullable=False)
     last_name=db.Column(db.String(255),unique=False,nullable=False)
     age=db.Column(db.Integer,unique=False,nullable=False)
-    gender = db.Column(db.Enum("MALE" , "FEMALE"))
+    gender = db.Column(db.Enum("MALE" , "FEMALE", name='gender_types'))
 
-    salutation = db.Column(db.Enum("Mr" , "Ms" , "Mrs." , "Dr" , "Madam" , "Sir" ))
+    salutation = db.Column(db.Enum("Mr" , "Ms" , "Mrs." , "Dr" , "Madam" , "Sir" , name='title_types'))
     tribal_name = db.Column(db.String(255),nullable=True)
     address=db.Column(db.String(255),nullable=False)
     address2=db.Column(db.String(255),nullable=True)
