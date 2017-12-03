@@ -28,3 +28,4 @@ pulp
 gunicorn
 psycopg2
 reportlab
+Flask-SSLify
