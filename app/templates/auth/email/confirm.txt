@@ -1,0 +1,12 @@
+Dear {{ user.username }},
+
+Welcome to Flasky!
+
+We have recieved your registration request. HSC admin will review and notify
+when approved. HSC admin has already been notified
+
+Sincerely,
+
+The HSC Team
+
+Note: replies to this email address are not monitored.

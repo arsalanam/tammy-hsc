@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Generate new schedule{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Generate schedule</h1>
+</div>
+
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+
+
+               <div class="panel panel-default">
+
+                  <div class="panel-heading">schedule will be generated for following data  . </div>
+
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                            <th>Ward</th>
+                            <th>Ward requrirement</th>
+                            <th>Skills Needed</th>
+                            <th>Staff needed s0</th>
+                            <th>Staff needed s1</th>
+                            <th>Staff needed s2</th>
+                         </tr>
+                      </thead>
+                      <tbody>
+                {% for w in  ward_list %}
+                <tr>
+                  <td>{{w[0]}}</td>
+                  <td>{{w[1]}}</td>
+                  <td>{{w[2]}}</td>
+                    <td>{{w[3]}}</td>
+                      <td>{{w[4]}}</td>
+                      <td>{{w[5]}}</td>
+
+                </tr>
+                  {% endfor %}
+
+              </tbody>
+            </table>
+
+            </div>
+        </div>
+
+
+   </div>
+
+   <div class="container-fluid">
+
+        <div class="row">
+         <div class="col-md-8">
+         <div class="panel panel-default">
+
+                  <div class="panel-heading">Generate a new scheule  . </div>
+                  <div class="panel-body">
+                      {{ wtf.quick_form(form) }}
+                  </div>
+
+         </div>
+
+     </div>
+        </div>
+   </div>
+
+{% endblock %}

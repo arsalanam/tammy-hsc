@@ -1,0 +1,4 @@
+attached is schedule for {{week}} of  {{year}}.
+Effective date range for this schedule is {{date_range}}
+
+This schedule was generated with following custom message {{message}}
