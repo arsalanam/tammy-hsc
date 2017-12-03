@@ -44,3 +44,4 @@ venv
 .idea/modules.xml
 .idea/nsproject.iml
 .idea/workspace.xml
+.idea/vcs.xml
