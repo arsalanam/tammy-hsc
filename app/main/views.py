@@ -16,7 +16,7 @@ from ..gen_pdf import generate_pdf , gen_pdf_table , generate_sample_schedule
 def get_date_range(year , week):
     partial_date = "{0}-W{1}".format(year , week)
     date_1 = datetime.datetime.strptime(partial_date + '-1', "%Y-W%W-%w").strftime('%d, %b %Y')
-    date_2 = datetime.datetime.strptime(partial_date + '-0' , "%Y-W%W-%w").strftime('%d, %b %Y')
+    date_2 = datetime.datetime.strptime(partial_date + '-0', "%Y-W%W-%w").strftime('%d, %b %Y')
 
     return  date_1 + '-' + date_2
 
@@ -297,7 +297,7 @@ def generateschedule() :
             pdf_path = 'app/' + file_path
 
             data = generate_sample_schedule()
-            gen_pdf_table(pdf_path , data = data)
+            gen_pdf_table(pdf_path , data = data , year = _year , week = _week)
 
             data_row = GeneratedSchedule.query.filter(GeneratedSchedule.year ==_year , GeneratedSchedule.week == _week).first()
             if  data_row:

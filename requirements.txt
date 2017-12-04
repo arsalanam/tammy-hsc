@@ -29,3 +29,4 @@ gunicorn
 psycopg2
 reportlab
 Flask-SSLify
+conference_scheduler

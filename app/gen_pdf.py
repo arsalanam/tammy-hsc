@@ -4,8 +4,16 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4 , inch , landscape
 from reportlab.platypus import SimpleDocTemplate , Table , TableStyle , Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
-import io
+import io , datetime
 from random import randint
+
+
+def get_date_range(year , week):
+    partial_date = "{0}-W{1}".format(year , week)
+    date_1 = datetime.datetime.strptime(partial_date + '-1', "%Y-W%W-%w").strftime('%d, %b %Y')
+    date_2 = datetime.datetime.strptime(partial_date + '-0', "%Y-W%W-%w").strftime('%d, %b %Y')
+
+    return  date_1 + '-' + date_2
 
 def generate_pdf(file_name , pdf_data):
     buf = io.BytesIO()
@@ -33,7 +41,7 @@ def generate_pdf(file_name , pdf_data):
     save_file(file_name=file_name , buffer=buf)
 
 
-def gen_pdf_table(file_name , data):
+def gen_pdf_table(file_name , data , year , week):
     buf = io.BytesIO()
 
     doc = SimpleDocTemplate(buf , pagesize=A4 , rightMargin=30 , leftMargin=30 , topMargin=30 ,
@@ -60,7 +68,8 @@ def gen_pdf_table(file_name , data):
     s = s["BodyText"]
     s.wordWrap = 'CJK'
 
-    elements.append(Paragraph('A Sample Fake schedule generated via random names' , p['title']))
+    elements.append(Paragraph(' Generated schedule for year{0} , week {1}'.format(year,week) , p['title']))
+    elements.append(Paragraph(' Effective date range for this period is {0}'.format(get_date_range(year , week)) , p['title']))
 
     elements.append(Paragraph('    ' , p['Normal']))
 
@@ -84,21 +93,14 @@ def save_file(file_name , buffer):
 def generate_sample_schedule():
     final_schedule = []
 
-    names_general = ['Shamin' , 'Nasreen' , 'Naseem' , 'Khalida' , 'Majida' , 'Naeema' , 'Nasim' , 'Ayesha' ,
-                     'Khadija' , 'Hajira' , 'Nabeela' , 'Amreen' , 'Adeela' , 'Arshi' , 'Azra' , 'Durdana' ,
-                     'Kehkeshan' , 'Majeedan' , 'Khatoon' , 'Fairy' , 'Raheela' , 'Sajida' , 'Shaeena' , 'Nagmana' ,
-                     'Tahira']
-    names_ot = ['Asma' , 'Zainab' , 'Alaya' , 'Naveed' , 'Ahmed' , 'Aslam' , 'Labeeb' , 'Kalid' , 'Nasir' , 'Aamina' ,
-                'Mamoona' , 'Maihra']
-    names_er = ['Mary' , 'Nancy' , 'Jennifer' , 'Adam' , 'Lacie' , 'Katie' , 'Cody' , 'Lina' , 'Katrina' , 'Irena' ,
-                'Farina']
-    names_peads = ['Kim' , 'Jamie' , 'Carrie' , 'Amy' , 'Annie' , 'Nikki' , 'Christy' , 'Tammra' , 'Jim' , 'Brian' ,
-                   'Ashima']
+    names_er = ['Jennifer' , 'Lacey' , 'Voilet' , 'Nasim' , 'Carly' , 'Carrie' , 'Salma' ]
+    names_opd = ['Jennifer' , 'Lacey' , 'Voilet' , 'Nasim' , 'Carly' , 'Carrie' , 'Salma']
+    names_surg = ['Jennifer' , 'Lacey' , 'Voilet' , 'Nasim' , 'Carly' , 'Carrie' , 'Salma']
 
-    days = ['02, Jan 2017' , '03, Jan 2017' , '04, Jan 2017' , '05, Jan 2017' , '06, Jan 2017' , '07, Jan 2017' ,
-            '08, Jan 2017']
 
-    wards = ['ER' , 'OT' , 'PEAD' , 'OPD']
+    days = ['Day1', 'Day2' , 'Day3' , 'Day4' , 'Day5' , 'Day6', 'Day7']
+
+    wards = ['ER', 'OPD' , 'SURG']
 
     # schedule_header = "Ward:|Date:______|shift1__________________|shift2________________|shift3______________________ |"
     schedule_header = ['Ward' , 'Date' , 'shift1' , 'shift2' , 'shift3']
@@ -109,40 +111,12 @@ def generate_sample_schedule():
     for ward in wards:
         for day in days:
 
-            if ward == 'ER':
-                shift1 = names_er[randint(1 , 10)] + '/' + names_general[randint(1 , 20)] + '/' + names_general[
-                    randint(1 , 20)]
-                shift2 = names_er[randint(1 , 10)] + '/' + names_general[randint(1 , 20)] + '/' + names_general[
-                    randint(1 , 20)]
-                shift3 = names_er[randint(1 , 10)] + '/' + names_general[randint(1 , 20)] + '/' + names_general[
-                    randint(1 , 20)]
+            shift1 = names_opd[randint(0 , 6)] + '/' + names_er[randint(0 , 6)] + '/' + names_surg[randint(0 , 6)]
+            shift2 = names_opd[randint(0 , 6)] + '/' + names_er[randint(0 , 6)] + '/' + names_surg[randint(0 , 6)]
+            shift3 = names_opd[randint(0 , 6)] + '/' + names_er[randint(0 , 6)] + '/' + names_surg[randint(0 , 6)]
 
                 # formated_schedule = schedule_line.format(ward , day , shift1 , shift2 , shift3)
-                formated_schedule = [ward , day , shift1 , shift2 , shift3]
-                final_schedule.append(formated_schedule)
-            if ward == 'OT':
-                shift1 = names_ot[randint(1 , 10)] + '/' + names_general[randint(1 , 20)] + '/' + names_general[
-                    randint(1 , 20)]
-                shift2 = names_ot[randint(1 , 10)] + '/' + names_general[randint(1 , 20)]
-                shift3 = names_ot[randint(1 , 10)] + '/' + names_general[randint(1 , 20)]
-                # formated_schedule = schedule_line.format(ward , day , shift1 , shift2 , shift3)
-                formated_schedule = [ward , day , shift1 , shift2 , shift3]
-                final_schedule.append(formated_schedule)
-            if ward == 'PEAD':
-                shift1 = names_peads[randint(1 , 10)] + '/' + names_general[randint(1 , 20)] + '/' + names_general[
-                    randint(1 , 20)]
-                shift2 = names_peads[randint(1 , 10)] + '/' + names_general[randint(1 , 20)]
-                shift3 = names_peads[randint(1 , 10)] + '/' + names_general[randint(1 , 20)]
-                # formated_schedule = schedule_line.format(ward , day , shift1 , shift2 , shift3)
-                formated_schedule = [ward , day , shift1 , shift2 , shift3]
-                final_schedule.append(formated_schedule)
-            else:
-                shift1 = names_general[randint(1 , 10)] + '/' + names_general[randint(1 , 20)] + '/' + names_general[
-                    randint(1 , 20)]
-                shift2 = names_general[randint(1 , 10)]
-                shift3 = names_general[randint(1 , 10)]
-                # formated_schedule = schedule_line.format(ward , day , shift1 , shift2 , shift3)
-                formated_schedule = [ward , day , shift1 , shift2 , shift3]
-                final_schedule.append(formated_schedule)
+            formated_schedule = [ward , day , shift1 , shift2 , shift3]
+            final_schedule.append(formated_schedule)
 
     return final_schedule
