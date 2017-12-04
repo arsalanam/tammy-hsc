@@ -57,7 +57,8 @@ def index():
         _week = item.week
         _date_range = get_date_range(year=_year , week = _week)
         _date_generated = item.date_generated.strftime('%Y-%m-%d')
-        row = ( item.id , _year , _week , _date_range , _date_generated)
+        _generated_by = item.generated_by
+        row = ( item.id , _year , _week , _date_range , _date_generated , _generated_by)
         generated_list.append(row)
 
 
