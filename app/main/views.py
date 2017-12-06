@@ -48,8 +48,8 @@ def server_shutdown():
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    all_generated = db.session.query(GeneratedSchedule) \
-        .all()
+    all_generated = db.session.query(GeneratedSchedule)\
+        .order_by("week").all()
 
     generated_list = []
     for item in  all_generated:
