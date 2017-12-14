@@ -84,7 +84,7 @@ def gen_pdf_table(file_name , data , year , week):
     line_text = ''
     for line in data:
 
-        elements.append(Paragraph(line,p['Normal']))
+        elements.append(Paragraph('&nbsp;&nbsp;&nbsp;&nbsp;' + line,p['Normal']))
 
     doc.build(elements)
     save_file(file_name=file_name , buffer=buf)
