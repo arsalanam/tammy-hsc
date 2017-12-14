@@ -6,6 +6,7 @@ from reportlab.platypus import SimpleDocTemplate , Table , TableStyle , Paragrap
 from reportlab.lib.styles import getSampleStyleSheet
 import io , datetime
 from random import randint
+from .schedular import main_schedule
 
 
 def get_date_range(year , week):
@@ -73,13 +74,18 @@ def gen_pdf_table(file_name , data , year , week):
 
     elements.append(Paragraph('    ' , p['Normal']))
 
-    data2 = [[Paragraph(cell , s) for cell in row] for row in data]
+    # data2 = [[Paragraph(cell , s) for cell in row] for row in data]
+    #
+    # t = Table(data2)
+    # t.setStyle(style)
+    #
+    # # Send the data and build the file
+    # elements.append(t)
+    line_text = ''
+    for line in data:
+        line_text = '' + line + line_text + '\r'
 
-    t = Table(data2)
-    t.setStyle(style)
-
-    # Send the data and build the file
-    elements.append(t)
+    elements.append(Paragraph(line_text,p['Normal']))
     doc.build(elements)
     save_file(file_name=file_name , buffer=buf)
 
@@ -120,3 +126,8 @@ def generate_sample_schedule():
             final_schedule.append(formated_schedule)
 
     return final_schedule
+
+def generate_real_schedule(year,week):
+    capacity = 3
+    data = main_schedule(year=year , week = week)
+

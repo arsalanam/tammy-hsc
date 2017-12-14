@@ -13,7 +13,7 @@ def get_slots_for_ward(year , week  , ward , capacity):
 
     start_date  = datetime.strptime(partial_date + '-1', "%Y-W%W-%w")
     s_shift = start_date
-    for day in range(0, 6):
+    for day in range(0, 7):
 
         d_day = start_date + timedelta(days=day)
 
@@ -37,35 +37,32 @@ def get_nurse_events(employee_name , unavilable_slots ):
 
     return employee_events
 
-def get_nurse_events_2(employee_name , unavilable_slots ):
+def get_nurse_events_2(employee_name  , unavilable_slots ):
     employee_events = []
+    unavailable_events = []
     for day in range(0 , 7):
         selected = random.sample([1,2,3] ,1 )
         event1 = Event(name=employee_name + '_e1_' + '_' + str(day) , duration=60 * 8 , tags=[employee_name] ,
-                        demand=0)
+                        demand=3 , unavailability=unavilable_slots)
         event2 = Event(name=employee_name + '_e2_' + '_' + str(day) , duration=60 * 8 , tags=[employee_name] ,
-                         demand=0)
+                         demand=3 , unavailability=unavilable_slots)
 
-        event3 = Event(name=employee_name + '_e4_' + '_' + str(day) , duration=60 * 8 , tags=[employee_name] ,
-                        demand=0)
+        event3 = Event(name=employee_name + '_e3_' + '_' + str(day) , duration=60 * 8 , tags=[employee_name] ,
+                        demand=3 , unavailability=unavilable_slots)
 
 
+        if selected == 1 :
+            employee_events.append(event1)
+            unavailable_events=[event2 , event3]
+        elif  selected == 2 :
+            employee_events.append(event2)
+            unavailable_events=[event1 , event3]
+        else:
+            employee_events.append(event3)
+            unavailable_events = [event1 , event2]
 
-        employee_events.append(event1)
-        employee_events.append(event2)
-        employee_events.append(event3)
 
-        if selected ==1:
-            event1.add_unavailability(event2)
-            event1.add_unavailability(event3)
-        elif selected == 2 :
-            event2.add_unavailability(event1)
-            event2.add_unavailability(event3)
-        elif selected == 3:
-            event3.add_unavailability(event1)
-            event3.add_unavailability(event2)
-
-    return employee_events
+    return employee_events , unavailable_events
 
 
 
@@ -74,27 +71,45 @@ def main():
     wards = ["ER" , "OPD" , "SURG"]
     all_slots = []
     all_events = []
+
+    ward_slot = {}
     for ward in wards:
         slots = get_slots_for_ward(2017,1, ward , 3)
+        ward_slot[ward] = slots
         all_slots = all_slots  + slots
 
 
-    nurses = ["latifa bibi" , "salma" , "nadia" , "nazia" , "munir" , "shamim" , "Nasreen" ]
-    un_available_slots = []
+    nurses = ["latifa bibi" , "Naveeda" , "Majeed" , "Rahim" , 'Naveed' , 'Mujeeb'  ]
 
     for nurse in nurses:
-        nurse_events = get_nurse_events(nurse ,un_available_slots)
+        unavilable_slots = []
+        secure_random = random.SystemRandom()
+        selected_ward = secure_random.choice(wards)
+        print(selected_ward )
+        remaining = [item for item in wards if item != selected_ward]
+        print(remaining)
+        for item in remaining:
+            unavilable_slots = unavilable_slots + ward_slot[item]
+
+
+        nurse_events , un_valiable  = get_nurse_events_2(nurse , unavilable_slots)
+
         all_events =  all_events  + nurse_events
 
-    for e in all_events:
-        print(e)
 
-    #func = objective_functions.efficiency_capacity_demand_difference
-    func = objective_functions.equity_capacity_demand_difference
+    print (all_events)
 
-    schedule = scheduler.schedule(all_events  , all_slots , objective_function=func)
+    func = objective_functions.efficiency_capacity_demand_difference
+    #func = objective_functions.equity_capacity_demand_difference
+
+    schedule = scheduler.schedule(all_events  , all_slots )
     schedule.sort(key=lambda item: item.slot.starts_at)
+
+
+
     for item in schedule:
+
+
         print(f"{item.event.tags[0]} at {item.slot.starts_at} in {item.slot.venue}")
 
 

@@ -76,6 +76,11 @@ def deploy():
     Role.insert_roles()
     User.create_admin()
 
+@manager.command
+def test_model():
+    from app.schedular import main
+    main()
+
     # create self-follows for all users
     #User.add_self_follows()
 

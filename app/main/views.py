@@ -10,7 +10,8 @@ from ..decorators import admin_required, permission_required
 from os.path import isfile , join , os
 import json , datetime
 from ..email import send_email , send_email_with_attachment
-from ..gen_pdf import generate_pdf , gen_pdf_table , generate_sample_schedule
+from ..gen_pdf import generate_pdf , gen_pdf_table
+from ..schedular import main_schedule
 
 
 def get_date_range(year , week):
@@ -292,7 +293,8 @@ def generateschedule() :
 
             pdf_path = 'app/' + file_path
 
-            data = generate_sample_schedule()
+            #data = generate_sample_schedule()
+            data = main_schedule(_year,_week , 3)
             gen_pdf_table(pdf_path , data = data , year = _year , week = _week)
 
             data_row = GeneratedSchedule.query.filter(GeneratedSchedule.year ==_year , GeneratedSchedule.week == _week).first()
