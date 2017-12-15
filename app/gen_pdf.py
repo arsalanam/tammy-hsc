@@ -3,7 +3,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4 , inch , landscape
 from reportlab.platypus import SimpleDocTemplate , Table , TableStyle , Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet , TA_CENTER
 import io , datetime
 from random import randint
 from .schedular import main_schedule
@@ -81,10 +81,13 @@ def gen_pdf_table(file_name , data , year , week):
     #
     # # Send the data and build the file
     # elements.append(t)
-    line_text = ''
+    style = getSampleStyleSheet()
+    normal = style["Normal"]
+    normal.alignment = TA_CENTER
+
     for line in data:
 
-        elements.append(Paragraph('&nbsp;&nbsp;&nbsp;&nbsp;' + line,p['Normal']))
+        elements.append(Paragraph(line,normal))
 
     doc.build(elements)
     save_file(file_name=file_name , buffer=buf)
