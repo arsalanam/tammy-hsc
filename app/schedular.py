@@ -96,9 +96,12 @@ def main_schedule(year,week,capacity):
         for item in remaining:
             unavilable_slots = unavilable_slots + ward_slot[item]
 
-        nurse_events , un_valiable = get_nurse_events_2(nurse , unavilable_slots)
+        nurse_event , un_valiable = get_nurse_events_2(nurse , unavilable_slots)
 
-        all_events = all_events + nurse_events
+        for entry in un_valiable:
+            nurse_event[0].add_unavailability(entry)
+
+        all_events = all_events + nurse_event
 
 
 
